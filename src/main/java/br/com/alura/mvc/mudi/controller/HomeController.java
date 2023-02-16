@@ -5,13 +5,13 @@ import br.com.alura.mvc.mudi.model.StatusPedido;
 import br.com.alura.mvc.mudi.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -22,16 +22,18 @@ public class HomeController {
     private PedidoRepository pedidoRepository;
 
     @GetMapping
-    public ModelAndView home(){
-        List<Pedido> pedidos = pedidoRepository.findAll();
+    public ModelAndView home(Principal principal){
+        List<Pedido> pedidos = pedidoRepository.findAllByUser(principal.getName());
         ModelAndView mv = new ModelAndView("home");
         mv.addObject("pedidos", pedidos);
         return mv;
     }
 
     @GetMapping(path = "/{status}")
-    public ModelAndView aguardando(@PathVariable("status") String status){
-        List<Pedido> pedidos = pedidoRepository.findByStatus(StatusPedido.valueOf(status.toUpperCase()));
+    public ModelAndView aguardando(@PathVariable("status") String status, Principal principal){
+        List<Pedido> pedidos = pedidoRepository.findByStatusAndUserUsername(
+                StatusPedido.valueOf(status.toUpperCase()),
+                principal.getName());
         ModelAndView mv = new ModelAndView("home");
         mv.addObject("pedidos", pedidos);
         mv.addObject("status", status);
