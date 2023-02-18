@@ -6,6 +6,7 @@ import br.com.alura.mvc.mudi.repository.PedidoRepository;
 import br.com.alura.mvc.mudi.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -31,6 +32,7 @@ public class PedidoController {
         return new ModelAndView("pedido/formulario");
     }
 
+    @CacheEvict(cacheNames="pedidos", allEntries=true)
     @PostMapping(path = "/novo")
     public String novo(@Valid RequisicaoNovoPedido requisicao, BindingResult result) {
         if(result.hasErrors()) {

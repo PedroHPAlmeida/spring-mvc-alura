@@ -15,13 +15,34 @@
     </style>
 </head>
 
-<div th:fragment="logo" class="logo-container mb-3 p-3 d-flex justify-content-between">
-    <span class="logo">mudi</span>
-    <span class="mt-3">
-        <a sec:authorize="!isAuthenticated()" class="text-light" href="/login">login</a>
-        <a onclick="document.querySelector('#form-login').submit()" sec:authorize="isAuthenticated()" class="text-light" href="#">logout</a>
-        <form id="form-login" th:action="@{/logout}" method="post"></form>
-    </span>
+<div th:fragment="logo">
+    <div class="logo-container p-3 d-flex justify-content-between">
+        <span class="logo ml-2">mudi</span>
+        <span class="mt-3 mr-2">
+            <a sec:authorize="!isAuthenticated()" class="text-light" href="/login">login</a>
+            <a onclick="document.querySelector('#form-login').submit()" sec:authorize="isAuthenticated()" class="text-light" href="#">logout</a>
+            <form id="form-login" th:action="@{/logout}" method="post"></form>
+        </span>
+    </div>
+    <div class="mb-2" sec:authorize="isAuthenticated()">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" th:href="@{/home}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{usuario/pedidos}">Meus Pedidos</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
 </div>
 
 <div th:fragment="titulo(valor)" class="mt-4 p-5 bg-body-secondary rounded-top">
